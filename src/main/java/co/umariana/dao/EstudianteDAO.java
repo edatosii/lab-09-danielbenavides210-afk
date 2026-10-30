@@ -1,5 +1,5 @@
 package co.umariana.dao;
- 
+
 import co.umariana.conexion.ConexionBD;
 import co.umariana.modelo.Estudiante;
 import java.sql.Connection;
@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
- 
+
 /**
  * DAO (Data Access Object): la única clase que habla con la base de datos.
  * Aquí viven las operaciones del CRUD sobre la tabla "estudiantes"
@@ -46,11 +46,11 @@ import java.util.List;
  *    SQLException; el DAO lo captura y devuelve false (no se lanza ninguna excepción).
  */
 public class EstudianteDAO {
- 
+
     // =====================================================================
     // ETAPA 1. Registrar (INSERT)  -- YA RESUELTA, úsela como modelo
     // =====================================================================
- 
+
     /**
      * Inserta un estudiante nuevo (nombre, correo, semestre).
      *
@@ -69,11 +69,11 @@ public class EstudianteDAO {
             return false;
         }
     }
- 
+
     // =====================================================================
     // ETAPA 2. Listar (SELECT)
     // =====================================================================
- 
+
 /**
  * @return todos los estudiantes ordenados por id;
  *         lista vacía si no hay o si hay un error.
@@ -81,11 +81,11 @@ public class EstudianteDAO {
 public List<Estudiante> listar() {
     List<Estudiante> estudiantes = new ArrayList<>();
     String sql = "SELECT id, nombre, correo, semestre FROM estudiantes ORDER BY id";
- 
+
     try (Connection con = ConexionBD.conectar();
          PreparedStatement ps = con.prepareStatement(sql);
          ResultSet rs = ps.executeQuery()) {
- 
+
         while (rs.next()) {
             Estudiante estudiante = new Estudiante(
                 rs.getInt("id"),
@@ -93,23 +93,23 @@ public List<Estudiante> listar() {
                 rs.getString("correo"),
                 rs.getInt("semestre")
             );
- 
+
             estudiantes.add(estudiante);
         }
- 
+
     } catch (SQLException e) {
         System.out.println("Error al listar estudiantes: " + e.getMessage());
         return new ArrayList<>();
     }
- 
+
     return estudiantes;
 }
- 
- 
+
+
     // =====================================================================
     // ETAPA 3. Buscar por id (SELECT ... WHERE)
     // =====================================================================
- 
+
     /** @return el estudiante con ese id, o null si no existe (o si hay un error) */
     public Estudiante buscarPorId(int id) {
         String sql = "SELECT id, nombre, correo, semestre FROM estudiantes WHERE id = ?";
@@ -127,11 +127,11 @@ public List<Estudiante> listar() {
         }
         return null;
     }
- 
+
     // =====================================================================
     // ETAPA 4. Actualizar (UPDATE)
     // =====================================================================
- 
+
     /**
      * Cambia nombre, correo y semestre del estudiante cuyo id es estudiante.getId().
      *
@@ -152,11 +152,11 @@ public List<Estudiante> listar() {
             return false;
         }
     }
- 
+
     // =====================================================================
     // ETAPA 5. Eliminar (DELETE)
     // =====================================================================
- 
+
     /** @return true si se eliminó; false si no existía ese id o si hubo un error */
     public boolean eliminar(int id) {
         String sql = "DELETE FROM estudiantes WHERE id = ?";
